@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Barber's Spa — Monterrey</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300;1,400&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Tokens ─────────────────────────────────────────────── */
+    :root {
+      --bg:        oklch(0.08 0.000 0);
+      --surface:   oklch(0.12 0.012 95);
+      --surface-2: oklch(0.17 0.012 95);
+      --ink:       oklch(0.94 0.018 85);
+      --muted:     oklch(0.62 0.010 90);
+      --dim:       oklch(0.38 0.008 90);
+      --primary:   oklch(0.74 0.088 105);
+      --primary-dk:oklch(0.58 0.082 105);
+      --border:    oklch(0.22 0.008 90);
+
+      --ff-display: 'Barlow Condensed', sans-serif;
+      --ff-body:    'Barlow', sans-serif;
+
+      --gutter: clamp(1.5rem, 6vw, 4rem);
+      --section-pad: clamp(4rem, 8vw, 7rem);
+    }
+
+    /* ─── Reset ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--ff-body);
+      font-size: 17px;
+      line-height: 1.65;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img { display: block; max-width: 100%; }
+    a { color: inherit; }
+
+    /* ─── Nav ────────────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 200;
+      padding: 1.2rem var(--gutter);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      background: linear-gradient(
+        to bottom,
+        oklch(0.08 0 0 / 0.92) 0%,
+        oklch(0.08 0 0 / 0) 100%
+      );
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .nav-logo {
+      font-family: var(--ff-display);
+      font-weight: 900;
+      font-size: 1.1rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--primary);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2.25rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+
+    /* ─── Buttons ────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--ff-display);
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-1px); }
+
+    .btn-gold {
+      padding: 0.7rem 1.5rem;
+      background: var(--primary);
+      color: oklch(0.10 0 0);
+    }
+    .btn-gold:hover { background: oklch(0.80 0.085 105); }
+
+    .btn-ghost {
+      padding: 0.68rem 1.48rem;
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+    .btn-ghost:hover {
+      background: var(--primary);
+      color: oklch(0.10 0 0);
+    }
+
+    /* ─── Hero ───────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      height: 100svh;
+      min-height: 680px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: var(--section-pad) var(--gutter);
+      overflow: hidden;
+    }
+
+    .hero-img {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1621607512022-6aecc4fed814?auto=format&fit=crop&w=1800&q=85');
+      background-size: cover;
+      background-position: center 30%;
+      filter: brightness(0.35) saturate(0.6);
+      transform: scale(1.06);
+      transition: transform 9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: transform;
+    }
+    .hero-img.zoomed { transform: scale(1); }
+
+    .hero-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        oklch(0.08 0 0) 0%,
+        oklch(0.08 0 0 / 0.65) 40%,
+        oklch(0.08 0 0 / 0.18) 100%
+      );
+    }
+
+    .hero-body {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-eyeline {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+    }
+    .hero-eyeline-bar {
+      width: 2.5rem;
+      height: 1px;
+      background: var(--primary);
+    }
+    .hero-eyeline-text {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+
+    .hero h1 {
+      font-family: var(--ff-display);
+      font-size: clamp(3.8rem, 10vw, 6rem);
+      font-weight: 900;
+      line-height: 0.93;
+      text-transform: uppercase;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      margin-bottom: 0.6rem;
+      text-wrap: balance;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--primary);
+    }
+
+    .hero-city {
+      font-family: var(--ff-display);
+      font-weight: 300;
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2.25rem;
+    }
+
+    .hero-desc {
+      font-weight: 300;
+      font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+      color: var(--muted);
+      max-width: 44ch;
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-ctas {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* ─── Section scaffold ───────────────────────────────────── */
+    .wrap {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: var(--section-pad) var(--gutter);
+    }
+
+    .label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 0.9rem;
+    }
+
+    /* ─── Services ───────────────────────────────────────────── */
+    .services-bg { background: var(--surface); }
+
+    .services-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 3rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .services-head h2 {
+      font-family: var(--ff-display);
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 800;
+      text-transform: uppercase;
+      line-height: 0.96;
+      letter-spacing: -0.02em;
+      text-wrap: balance;
+      max-width: 18ch;
+    }
+
+    .services-head-note {
+      font-size: 0.92rem;
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 36ch;
+      line-height: 1.72;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .svc {
+      background: var(--surface);
+      padding: 2.5rem 2rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.25s;
+    }
+    .svc:hover { background: var(--surface-2); }
+
+    .svc::before {
+      content: '';
+      position: absolute;
+      left: 0; bottom: 0; right: 0;
+      height: 2px;
+      background: var(--primary);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s ease-out;
+    }
+    .svc:hover::before { transform: scaleX(1); }
+
+    .svc-name {
+      font-family: var(--ff-display);
+      font-size: 2rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    .svc-sep {
+      width: 2rem;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .svc-desc {
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.72;
+      flex: 1;
+      max-width: 38ch;
+    }
+
+    .svc-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-family: var(--ff-display);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--primary);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .svc-link:hover { gap: 0.7rem; }
+    .svc-link svg { flex-shrink: 0; }
+
+    /* ─── About ──────────────────────────────────────────────── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2.5rem, 6vw, 5.5rem);
+      align-items: center;
+    }
+
+    .about-photo {
+      position: relative;
+      aspect-ratio: 4/5;
+      overflow: hidden;
+    }
+    .about-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 6s ease-out;
+    }
+    .about-photo:hover img { transform: scale(1.04); }
+
+    .about-accent {
+      position: absolute;
+      top: 2.5rem; left: 0;
+      width: 2px;
+      height: 7rem;
+      background: var(--primary);
+    }
+
+    .about-text h2 {
+      font-family: var(--ff-display);
+      font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 0.96;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      text-wrap: balance;
+    }
+    .about-text h2 span { color: var(--primary); }
+
+    .about-text p {
+      font-size: 0.93rem;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.78;
+      max-width: 50ch;
+      margin-bottom: 1.1rem;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem 2rem;
+      padding: 1.75rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+
+    .stat-val {
+      font-family: var(--ff-display);
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: var(--primary);
+      line-height: 1;
+    }
+    .stat-key {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-top: 0.2rem;
+    }
+
+    /* ─── Gallery strip ──────────────────────────────────────── */
+    .strip { overflow: hidden; background: var(--bg); padding: clamp(2rem, 4vw, 3.5rem) 0; }
+
+    .strip-track {
+      display: flex;
+      gap: 1.25rem;
+      padding: 0 var(--gutter);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .strip-track::-webkit-scrollbar { display: none; }
+
+    .strip-item {
+      flex: 0 0 280px;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+    }
+    .strip-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(50%) brightness(0.85);
+      transition: transform 0.55s ease, filter 0.4s ease;
+    }
+    .strip-item:hover img {
+      transform: scale(1.06);
+      filter: grayscale(0%) brightness(0.95);
+    }
+
+    /* ─── Contact ────────────────────────────────────────────── */
+    .contact-bg { background: var(--surface); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(3rem, 6vw, 5rem);
+      align-items: start;
+    }
+
+    .contact-info h2 {
+      font-family: var(--ff-display);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 0.96;
+      letter-spacing: -0.02em;
+      margin-bottom: 2.25rem;
+      text-wrap: balance;
+    }
+
+    .clist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .citem {
+      display: flex;
+      gap: 0.9rem;
+      align-items: flex-start;
+    }
+
+    .citem-icon {
+      width: 1.35rem;
+      height: 1.35rem;
+      color: var(--primary);
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+    }
+
+    .citem-tag {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 0.2rem;
+    }
+
+    .citem-val {
+      font-size: 0.97rem;
+      color: var(--ink);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .citem-val:hover { color: var(--primary); }
+
+    .socials {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 2.5rem;
+    }
+
+    .social-btn {
+      width: 2.4rem;
+      height: 2.4rem;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--dim);
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .social-btn svg { width: 0.95rem; height: 0.95rem; }
+    .social-btn:hover {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: oklch(0.10 0 0);
+    }
+
+    .map-wrap {
+      width: 100%;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      background: var(--surface-2);
+    }
+    .map-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      filter: invert(92%) hue-rotate(180deg) saturate(0.6) brightness(0.85);
+    }
+
+    /* ─── Footer ─────────────────────────────────────────────── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 1.75rem var(--gutter);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-brand {
+      font-family: var(--ff-display);
+      font-weight: 900;
+      font-size: 1rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+
+    footer small {
+      font-size: 0.78rem;
+      color: var(--dim);
+    }
+
+    /* ─── WhatsApp float ─────────────────────────────────────── */
+    .wa-float {
+      position: fixed;
+      bottom: 1.75rem;
+      right: 1.75rem;
+      z-index: 300;
+      width: 3.4rem;
+      height: 3.4rem;
+      background: #25D366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      box-shadow: 0 4px 18px oklch(0 0 0 / 0.45);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .wa-float:hover {
+      transform: translateY(-3px) scale(1.07);
+      box-shadow: 0 8px 28px oklch(0 0 0 / 0.55);
+    }
+    .wa-float svg { width: 1.75rem; height: 1.75rem; fill: #fff; }
+
+    /* ─── Reveal ─────────────────────────────────────────────── */
+    [data-reveal] {
+      opacity: 1;
+      transform: none;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      [data-reveal] {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.55s ease-out, transform 0.55s ease-out;
+      }
+      [data-reveal].in {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* ─── Hero entrance ──────────────────────────────────────── */
+    @media (prefers-reduced-motion: no-preference) {
+      .hero-body > * {
+        opacity: 0;
+        animation: rise 0.7s ease-out both;
+      }
+      .hero-body > *:nth-child(1) { animation-delay: 0.15s; }
+      .hero-body > *:nth-child(2) { animation-delay: 0.28s; }
+      .hero-body > *:nth-child(3) { animation-delay: 0.38s; }
+      .hero-body > *:nth-child(4) { animation-delay: 0.48s; }
+      .hero-body > *:nth-child(5) { animation-delay: 0.56s; }
+
+      @keyframes rise {
+        from { opacity: 0; transform: translateY(22px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+    }
+
+    /* ─── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .services-head { flex-direction: column; align-items: flex-start; gap: 1.25rem; }
+      .about-grid { grid-template-columns: 1fr; }
+      .about-photo { aspect-ratio: 3/2; order: -1; }
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 680px) {
+      .nav-links { display: none; }
+      .services-grid { grid-template-columns: 1fr; }
+      .hero-ctas { flex-direction: column; align-items: flex-start; }
+      .about-stats { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<header class="nav">
+  <a class="nav-logo" href="#">TBS · Mty</a>
+  <nav aria-label="Navegación principal">
+    <ul class="nav-links">
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </nav>
+  <a class="btn btn-gold" href="https://wa.me/5218116904770" target="_blank" rel="noopener">
+    Agendar cita
+  </a>
+</header>
+
+<!-- Hero -->
+<section class="hero" aria-label="Portada">
+  <div class="hero-img" id="heroImg" role="img" aria-label="Interior de The Barber's Spa Monterrey"></div>
+  <div class="hero-gradient" aria-hidden="true"></div>
+  <div class="hero-body">
+    <div class="hero-eyeline" aria-hidden="true">
+      <span class="hero-eyeline-bar"></span>
+      <span class="hero-eyeline-text">Barbería · Peluquería · Spa</span>
+    </div>
+    <h1>The Barber's<br><em>Spa</em></h1>
+    <p class="hero-city">Monterrey, México</p>
+    <p class="hero-desc">Donde la precisión del barbero clásico se encuentra con el cuidado del spa premium. Tres disciplinas, un estándar.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-gold" href="https://wa.me/5218116904770" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.57 1.37 5.05L2 22l5.1-1.35A9.96 9.96 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm4.9 13.75c-.21.58-1.22 1.11-1.68 1.15-.44.04-.87.22-2.89-.6-2.44-.98-3.99-3.44-4.11-3.6-.12-.16-.96-1.28-.96-2.44 0-1.16.61-1.73.82-1.97.21-.24.46-.3.62-.3h.44c.14 0 .33-.05.52.4.2.48.68 1.65.74 1.77.06.12.1.26.02.42-.08.16-.12.26-.24.4-.12.14-.25.32-.36.43-.12.12-.24.25-.1.49.14.24.62.97 1.33 1.57.91.8 1.68 1.05 1.92 1.17.24.12.38.1.52-.06.14-.16.58-.68.74-.91.16-.23.32-.19.54-.11.22.08 1.38.65 1.62.77.24.12.4.18.46.28.06.1.06.58-.15 1.13z"/></svg>
+        Agendar por WhatsApp
+      </a>
+      <a class="btn btn-ghost" href="tel:+528183033231">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>
+        Llamar
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Services -->
+<section class="services-bg" id="servicios" aria-label="Servicios">
+  <div class="wrap">
+    <div class="services-head" data-reveal>
+      <div>
+        <p class="label">Lo que ofrecemos</p>
+        <h2>Tres disciplinas.<br>Un solo estándar.</h2>
+      </div>
+      <p class="services-head-note">Cada servicio está diseñado para que salgas diferente a como entraste. Técnica impecable, atención personalizada, sin apresuramientos.</p>
+    </div>
+    <div class="services-grid">
+      <!-- Peluquería -->
+      <div class="svc" data-reveal>
+        <div class="svc-name">Peluquería</div>
+        <div class="svc-sep" aria-hidden="true"></div>
+        <p class="svc-desc">Cortes de cabello con técnica y herramientas de precisión. Desde clásicos atemporales hasta los estilos más actuales, adaptados a tu fisonomía y ritmo de vida.</p>
+        <a class="svc-link" href="https://wa.me/5218116904770" target="_blank" rel="noopener">
+          Agendar corte
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <!-- Barbería -->
+      <div class="svc" data-reveal>
+        <div class="svc-name">Barbería</div>
+        <div class="svc-sep" aria-hidden="true"></div>
+        <p class="svc-desc">Arreglo y perfilado de barba con navaja recta, toallas calientes y productos de primera calidad. Un ritual que revive la tradición del barbero clásico.</p>
+        <a class="svc-link" href="https://wa.me/5218116904770" target="_blank" rel="noopener">
+          Agendar afeitado
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <!-- Spa -->
+      <div class="svc" data-reveal>
+        <div class="svc-name">Spa</div>
+        <div class="svc-sep" aria-hidden="true"></div>
+        <p class="svc-desc">Tratamientos faciales, masajes y rituales de bienestar para el hombre moderno. Recuperación profunda que combina técnica estética con relajación total.</p>
+        <a class="svc-link" href="https://wa.me/5218116904770" target="_blank" rel="noopener">
+          Agendar tratamiento
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section id="nosotros" aria-label="Quiénes somos">
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="about-photo" data-reveal>
+        <div class="about-accent" aria-hidden="true"></div>
+        <img
+          src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=900&q=85"
+          alt="Barbero profesional en The Barber's Spa Monterrey"
+          loading="lazy"
+          width="900"
+          height="1125"
+        />
+      </div>
+      <div class="about-text" data-reveal>
+        <p class="label">Quiénes somos</p>
+        <h2>Oficio,<br>no <span>servicio</span></h2>
+        <p>The Barber's Spa nació en Monterrey con una idea clara: que un corte de cabello o un afeitado no son transacciones. Son experiencias que merecen tiempo, habilidad y atención.</p>
+        <p>Nuestro equipo combina la formación del barbero tradicional con los estándares de un spa de primer nivel. Cada cliente recibe atención exclusiva, sin prisa y sin compromisos.</p>
+        <div class="about-stats" aria-label="Datos del negocio">
+          <div>
+            <div class="stat-val">10+</div>
+            <div class="stat-key">Años de experiencia</div>
+          </div>
+          <div>
+            <div class="stat-val">3</div>
+            <div class="stat-key">Especialidades</div>
+          </div>
+          <div>
+            <div class="stat-val">100%</div>
+            <div class="stat-key">Satisfacción garantizada</div>
+          </div>
+          <div>
+            <div class="stat-val">MTY</div>
+            <div class="stat-key">Monterrey, NL</div>
+          </div>
+        </div>
+        <a class="btn btn-gold" href="https://wa.me/5218116904770" target="_blank" rel="noopener">Reservar mi lugar</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery -->
+<div class="strip" aria-label="Galería">
+  <div class="strip-track">
+    <div class="strip-item">
+      <img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&w=500&q=80" alt="Interior de barbería de lujo" loading="lazy" width="500" height="667" />
+    </div>
+    <div class="strip-item">
+      <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=500&q=80" alt="Barbero trabajando con precisión" loading="lazy" width="500" height="667" />
+    </div>
+    <div class="strip-item">
+      <img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&w=500&q=80" alt="Herramientas de barbería premium" loading="lazy" width="500" height="667" />
+    </div>
+    <div class="strip-item">
+      <img src="https://images.unsplash.com/photo-1621607512022-6aecc4fed814?auto=format&fit=crop&w=500&q=80" alt="Ambiente de barbería profesional" loading="lazy" width="500" height="667" />
+    </div>
+    <div class="strip-item">
+      <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=500&q=80" alt="Tratamiento spa masculino" loading="lazy" width="500" height="667" />
+    </div>
+  </div>
+</div>
+
+<!-- Contact -->
+<section class="contact-bg" id="contacto" aria-label="Contacto y ubicación">
+  <div class="wrap">
+    <div class="contact-grid">
+      <div class="contact-info" data-reveal>
+        <p class="label">Agenda tu visita</p>
+        <h2>Estamos<br>en Monterrey</h2>
+        <ul class="clist">
+          <li class="citem">
+            <svg class="citem-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.57 1.37 5.05L2 22l5.1-1.35A9.96 9.96 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm4.9 13.75c-.21.58-1.22 1.11-1.68 1.15-.44.04-.87.22-2.89-.6-2.44-.98-3.99-3.44-4.11-3.6-.12-.16-.96-1.28-.96-2.44 0-1.16.61-1.73.82-1.97.21-.24.46-.3.62-.3h.44c.14 0 .33-.05.52.4.2.48.68 1.65.74 1.77.06.12.1.26.02.42-.08.16-.12.26-.24.4-.12.14-.25.32-.36.43-.12.12-.24.25-.1.49.14.24.62.97 1.33 1.57.91.8 1.68 1.05 1.92 1.17.24.12.38.1.52-.06.14-.16.58-.68.74-.91.16-.23.32-.19.54-.11.22.08 1.38.65 1.62.77.24.12.4.18.46.28.06.1.06.58-.15 1.13z"/></svg>
+            <div>
+              <div class="citem-tag">WhatsApp</div>
+              <a class="citem-val" href="https://wa.me/5218116904770" target="_blank" rel="noopener">+52 (81) 1690-4770</a>
+            </div>
+          </li>
+          <li class="citem">
+            <svg class="citem-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>
+            <div>
+              <div class="citem-tag">Teléfono</div>
+              <a class="citem-val" href="tel:+528183033231">+52 (81) 8303-3231</a>
+            </div>
+          </li>
+          <li class="citem">
+            <svg class="citem-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <div>
+              <div class="citem-tag">Correo</div>
+              <a class="citem-val" href="mailto:informes@barberspa.com">informes@barberspa.com</a>
+            </div>
+          </li>
+        </ul>
+
+        <nav class="socials" aria-label="Redes sociales">
+          <a class="social-btn" href="https://facebook.com/thebarberspamty" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+          </a>
+          <a class="social-btn" href="https://instagram.com/thebarbersspamty" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a class="social-btn" href="https://wa.me/5218116904770" target="_blank" rel="noopener" aria-label="WhatsApp">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.57 1.37 5.05L2 22l5.1-1.35A9.96 9.96 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm4.9 13.75c-.21.58-1.22 1.11-1.68 1.15-.44.04-.87.22-2.89-.6-2.44-.98-3.99-3.44-4.11-3.6-.12-.16-.96-1.28-.96-2.44 0-1.16.61-1.73.82-1.97.21-.24.46-.3.62-.3h.44c.14 0 .33-.05.52.4.2.48.68 1.65.74 1.77.06.12.1.26.02.42-.08.16-.12.26-.24.4-.12.14-.25.32-.36.43-.12.12-.24.25-.1.49.14.24.62.97 1.33 1.57.91.8 1.68 1.05 1.92 1.17.24.12.38.1.52-.06.14-.16.58-.68.74-.91.16-.23.32-.19.54-.11.22.08 1.38.65 1.62.77.24.12.4.18.46.28.06.1.06.58-.15 1.13z"/></svg>
+          </a>
+        </nav>
+      </div>
+
+      <div class="map-wrap" data-reveal>
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114846.98143193867!2d-100.38993!3d25.6866!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x866295159a9de87b%3A0xeee3e7885d3f2a46!2sMonterrey%2C%20N.L.!5e0!3m2!1ses!2smx!4v1700000000000!5m2!1ses!2smx"
+          loading="lazy"
+          title="Ubicación en Monterrey, N.L."
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-brand">The Barber's Spa · Monterrey</div>
+  <small>© 2026 The Barber's Spa. Todos los derechos reservados.</small>
+</footer>
+
+<!-- WhatsApp float -->
+<a class="wa-float" href="https://wa.me/5218116904770" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.57 1.37 5.05L2 22l5.1-1.35A9.96 9.96 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm4.9 13.75c-.21.58-1.22 1.11-1.68 1.15-.44.04-.87.22-2.89-.6-2.44-.98-3.99-3.44-4.11-3.6-.12-.16-.96-1.28-.96-2.44 0-1.16.61-1.73.82-1.97.21-.24.46-.3.62-.3h.44c.14 0 .33-.05.52.4.2.48.68 1.65.74 1.77.06.12.1.26.02.42-.08.16-.12.26-.24.4-.12.14-.25.32-.36.43-.12.12-.24.25-.1.49.14.24.62.97 1.33 1.57.91.8 1.68 1.05 1.92 1.17.24.12.38.1.52-.06.14-.16.58-.68.74-.91.16-.23.32-.19.54-.11.22.08 1.38.65 1.62.77.24.12.4.18.46.28.06.1.06.58-.15 1.13z"/></svg>
+</a>
+
+<script>
+(function () {
+  // Hero image subtle zoom on load
+  const img = document.getElementById('heroImg');
+  if (img) {
+    window.addEventListener('load', function () {
+      requestAnimationFrame(function () {
+        img.classList.add('zoomed');
+      });
+    });
+  }
+
+  // Scroll-triggered reveals
+  if ('IntersectionObserver' in window && window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+    const els = document.querySelectorAll('[data-reveal]');
+    const observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e, i) {
+        if (e.isIntersecting) {
+          setTimeout(function () { e.target.classList.add('in'); }, i * 60);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function (el) { observer.observe(el); });
+  } else {
+    document.querySelectorAll('[data-reveal]').forEach(function (el) {
+      el.classList.add('in');
+    });
+  }
+})();
+</script>
+</body>
+</html>
