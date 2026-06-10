@@ -98,9 +98,7 @@
     }
     .nav-logo { display: flex; align-items: center; gap: .7rem; text-decoration: none; }
     .nav-logo img {
-      height: 52px; width: 52px; object-fit: cover; border-radius: 50%;
-      mix-blend-mode: screen;
-      filter: contrast(1.55) brightness(1.02);
+      height: 52px; width: 52px; object-fit: contain;
     }
     .nav-logo-name {
       font-family: var(--ff-display);
@@ -178,8 +176,7 @@
     .hero-logo {
       width: clamp(190px, 30vw, 300px);
       margin: 0 auto 1.4rem;
-      mix-blend-mode: screen;
-      filter: contrast(1.55) brightness(1.02);
+      filter: drop-shadow(0 6px 30px rgb(0 0 0 / .55));
     }
     .hero-eyeline {
       display: flex; align-items: center; justify-content: center; gap: 1rem;
@@ -413,10 +410,8 @@
       color: var(--dim);
     }
     .footer-logo {
-      height: 72px; width: 72px; object-fit: cover; border-radius: 50%;
+      height: 72px; width: 72px; object-fit: contain;
       margin: 0 auto .8rem;
-      mix-blend-mode: screen;
-      filter: contrast(1.55) brightness(1.02);
     }
     .footer-brand {
       font-family: var(--ff-display);
