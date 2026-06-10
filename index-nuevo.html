@@ -442,7 +442,7 @@
 <!-- ─── Nav ─────────────────────────────────────────────────── -->
 <header class="nav">
   <a class="nav-logo" href="#inicio" aria-label="The Barber's Spa — inicio">
-    <img src="assets/logo.png" alt="Logo The Barber's Spa" />
+    <img src="assets/logo.png" alt="Logo The Barber's Spa" onerror="this.style.display='none'" />
     <span class="nav-logo-name">The Barber's Spa<small>Para el hombre moderno</small></span>
   </a>
   <nav aria-label="Principal">
@@ -463,8 +463,8 @@
   </div>
 
   <div class="hero-inner">
-    <img class="hero-logo" src="assets/logo.png" alt="The Barber's Spa — para el hombre moderno" />
-    <h1 class="sr-only">The Barber's Spa — Monterrey</h1>
+    <img class="hero-logo" src="assets/logo.png" alt="The Barber's Spa — para el hombre moderno" onerror="this.style.display='none';document.getElementById('heroTitle').classList.remove('sr-only')" />
+    <h1 class="sr-only" id="heroTitle" style="font-size:clamp(3rem,8vw,5.5rem);font-weight:800;text-transform:uppercase;margin-bottom:.6rem;">The Barber's <em style="color:var(--primary);font-style:italic;font-weight:400;">Spa</em></h1>
     <div class="hero-eyeline"><span class="hero-eyeline-text">Barbería · Peluquería · Spa</span></div>
     <p class="hero-city">Monterrey, México</p>
     <p class="hero-desc">Donde la precisión del barbero clásico se encuentra con el cuidado del spa premium. Tres disciplinas, un estándar.</p>
@@ -793,7 +793,7 @@
 
 <!-- ─── Footer ──────────────────────────────────────────────── -->
 <footer>
-  <img class="footer-logo" src="assets/logo.png" alt="" aria-hidden="true" />
+  <img class="footer-logo" src="assets/logo.png" alt="" aria-hidden="true" onerror="this.style.display='none'" />
   <div class="footer-brand">The Barber's Spa · Monterrey</div>
   <small>© 2026 The Barber's Spa. Todos los derechos reservados.</small>
 </footer>
