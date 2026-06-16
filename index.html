@@ -485,30 +485,12 @@
       .intro { height: 100svh; }
       .intro-stage { position: relative; }
     }
-    /* Ocultar nav y botón flotante hasta que la intro termina */
-    html.js .nav { opacity: 0; transform: translateY(-100%); pointer-events: none; transition: opacity .6s ease, transform .6s ease; }
-    html.js body.intro-done .nav { opacity: 1; transform: none; pointer-events: auto; }
-    html.js .wa-float { opacity: 0; transform: translateY(12px) scale(.9); pointer-events: none; transition: opacity .5s ease, transform .5s ease; }
-    html.js body.intro-done .wa-float { opacity: 1; transform: none; pointer-events: auto; }
   </style>
   <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
-<!-- ─── Intro: animación controlada por scroll ──────────────── -->
-<section class="intro" id="intro" aria-label="Intro">
-  <div class="intro-stage">
-    <video class="intro-video" id="introVideo" muted playsinline preload="auto" poster="assets/intro-poster.jpg" aria-hidden="true">
-      <source src="assets/intro.mp4" type="video/mp4" />
-    </video>
-    <div class="intro-veil" aria-hidden="true"></div>
-    <div class="intro-content">
-      <span class="intro-eyeline">El arte del cuidado masculino</span>
-      <div class="intro-title" id="introTitle">The Barber's <em>Spa</em></div>
-    </div>
-    <div class="intro-cue" id="introCue"><span>Desliza</span><span class="intro-cue-line"></span></div>
-  </div>
-</section>
+
 
 <!-- ─── Nav ─────────────────────────────────────────────────── -->
 <header class="nav">
@@ -951,73 +933,7 @@
 })();
 </script>
 
-<!-- Intro: scroll-scrub del video -->
-<script>
-(function () {
-  var intro = document.getElementById('intro');
-  var video = document.getElementById('introVideo');
-  var title = document.getElementById('introTitle');
-  var cue = document.getElementById('introCue');
-  var body = document.body;
 
-  function finish() { body.classList.add('intro-done'); }
-
-  var reduce = !window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
-  if (!intro || !video || reduce) { finish(); return; }
-
-  var primed = false;
-  function prime() {
-    if (primed) return; primed = true;
-    var p = video.play();
-    if (p && p.then) { p.then(function () { video.pause(); }).catch(function () {}); }
-    else { try { video.pause(); } catch (e) {} }
-  }
-  video.addEventListener('loadedmetadata', prime, { once: true });
-  if (video.readyState >= 1) prime();
-
-  var target = 0, current = 0, ticking = false, done = false;
-  function lerp(a, b, n) { return a + (b - a) * n; }
-
-  function computeTarget() {
-    var rect = intro.getBoundingClientRect();
-    var total = intro.offsetHeight - window.innerHeight;
-    var scrolled = Math.min(Math.max(-rect.top, 0), total);
-    target = total > 0 ? scrolled / total : 0;
-  }
-
-  function render() {
-    current = lerp(current, target, 0.16);
-    if (Math.abs(target - current) < 0.0005) current = target;
-    var dur = video.duration || 0;
-    if (dur) { try { video.currentTime = Math.min(current * dur, dur - 0.01); } catch (e) {} }
-
-    if (title) {
-      var o = 0;
-      if (current < 0.12) o = 0;
-      else if (current < 0.34) o = (current - 0.12) / 0.22;
-      else if (current < 0.74) o = 1;
-      else if (current < 0.94) o = 1 - (current - 0.74) / 0.20;
-      title.style.opacity = o.toFixed(3);
-      title.style.transform = 'translateY(' + ((1 - o) * 18).toFixed(1) + 'px)';
-    }
-    if (cue) cue.style.opacity = current < 0.08 ? '1' : Math.max(0, 1 - current / 0.08).toFixed(3);
-
-    if (current > 0.96 && !done) { done = true; finish(); }
-    else if (current <= 0.96 && done) { done = false; body.classList.remove('intro-done'); }
-
-    if (Math.abs(target - current) > 0.0005) requestAnimationFrame(render);
-    else ticking = false;
-  }
-
-  function onScroll() {
-    computeTarget();
-    if (!ticking) { ticking = true; requestAnimationFrame(render); }
-  }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll);
-  computeTarget(); requestAnimationFrame(render);
-})();
-</script>
 
 </body>
 </html>
