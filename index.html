@@ -8,7 +8,7 @@
   <meta name="description" content="The Barber's Spa, para el hombre moderno. Barbería, peluquería y spa en Monterrey. Cortes, arreglo de barba protocolo italiano, manicure, pedicure y más." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300;1,400&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Cinzel:wght@500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300;1,400&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet" />
 
   <style>
     /* ─── Tokens ─────────────────────────────────────────────── */
@@ -19,8 +19,8 @@
       --ink:       oklch(0.94 0.018 85);
       --muted:     oklch(0.62 0.010 90);
       --dim:       oklch(0.38 0.008 90);
-      --primary:   #da291c;
-      --primary-dk:#a81e13;
+      --primary:   oklch(0.74 0.088 105);
+      --primary-dk:oklch(0.58 0.082 105);
       --border:    oklch(0.22 0.008 90);
 
       --ff-display: 'Barlow Condensed', sans-serif;
@@ -319,16 +319,24 @@
     .product { scroll-snap-align: start; background: var(--surface); border: 1px solid var(--border); display: flex; flex-direction: column; }
     .product-media { aspect-ratio: 1; overflow: hidden; background: var(--surface-2); }
     .product-media img { width: 100%; height: 100%; object-fit: cover; }
-    .product-body { padding: 1.2rem 1.2rem 1.4rem; display: flex; flex-direction: column; gap: .45rem; flex: 1; }
-    .product-name { font-family: var(--ff-display); font-size: 1.25rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
-    .product-desc { color: var(--muted); font-weight: 300; font-size: .92rem; flex: 1; }
-    .product-foot { display: flex; align-items: center; justify-content: space-between; margin-top: .6rem; }
-    .product-price { font-family: var(--ff-display); font-size: 1.3rem; font-weight: 700; color: var(--primary); }
+    .product-body { padding: 1.2rem 1.2rem 1.4rem; display: flex; flex-direction: column; gap: .5rem; flex: 1; }
+    .product-brand {
+      font-family: var(--ff-display); font-size: .72rem; font-weight: 600;
+      letter-spacing: .25em; text-transform: uppercase; color: var(--primary);
+    }
+    .product-name { font-family: var(--ff-display); font-size: 1.18rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; line-height: 1.1; }
+    .product-desc { color: var(--muted); font-weight: 300; font-size: .9rem; flex: 1; }
+    .product-size {
+      font-family: var(--ff-display); font-size: .85rem; font-weight: 600;
+      letter-spacing: .12em; color: var(--dim); text-transform: uppercase;
+    }
+    .product-foot { margin-top: .7rem; }
     .product-buy {
-      font-family: var(--ff-display); font-size: .9rem; font-weight: 700;
+      display: block; text-align: center;
+      font-family: var(--ff-display); font-size: .95rem; font-weight: 700;
       text-transform: uppercase; letter-spacing: .12em;
       text-decoration: none; color: var(--bg);
-      background: var(--primary); padding: .45rem 1rem;
+      background: var(--primary); padding: .6rem 1rem;
       transition: background .25s;
     }
     .product-buy:hover { background: var(--primary-dk); }
@@ -336,25 +344,6 @@
     /* ─── Nosotros + galería ────────────────────────────────── */
     .about { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
     .about-copy p { color: var(--muted); font-weight: 300; margin-top: 1.1rem; }
-    /* Título en bloque rojo — guiño a la cabina telefónica británica, tipografía del logo */
-    .about-title {
-      display: inline-block;
-      background: #DA291C;
-      color: #fff;
-      font-family: 'Cinzel', 'Times New Roman', serif;
-      font-weight: 600;
-      font-size: clamp(1.6rem, 3.4vw, 2.6rem);
-      line-height: 1.3;
-      letter-spacing: .1em;
-      text-align: center;
-      text-transform: uppercase;
-      padding: clamp(1.4rem, 3vw, 2.2rem) clamp(1.6rem, 3.5vw, 2.8rem);
-      box-shadow:
-        inset 0 0 0 6px #DA291C,
-        inset 0 0 0 7px rgba(255,255,255,.75),
-        0 16px 38px rgba(218,41,28,.28);
-      margin-top: .4rem;
-    }
     .about-media { position: relative; }
     .about-media img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border: 1px solid var(--border); }
     .about-media::after {
@@ -450,47 +439,9 @@
     }
     .wa-float:hover { transform: scale(1.08); }
     .wa-float svg { width: 30px; height: 30px; }
-
-    /* ─── Intro: animación controlada por scroll ────────────── */
-    .intro { position: relative; height: 320vh; background: var(--bg); z-index: 1; }
-    .intro-stage { position: sticky; top: 0; height: 100svh; overflow: hidden; display: grid; place-items: center; }
-    .intro-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-    .intro-veil {
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(120% 80% at 50% 50%, transparent 28%, color-mix(in oklab, var(--bg) 72%, transparent)),
-        linear-gradient(to bottom, color-mix(in oklab, var(--bg) 38%, transparent), color-mix(in oklab, var(--bg) 18%, transparent) 50%, var(--bg));
-    }
-    .intro-content { position: relative; z-index: 2; text-align: center; padding: 0 var(--gutter); }
-    .intro-eyeline {
-      display: block; font-family: var(--ff-display);
-      font-size: clamp(.8rem, 1.6vw, 1rem); font-weight: 600;
-      text-transform: uppercase; letter-spacing: .4em; color: var(--primary); margin-bottom: 1.1rem;
-    }
-    .intro-title {
-      font-family: var(--ff-display);
-      font-size: clamp(3rem, 11vw, 7rem); font-weight: 800;
-      text-transform: uppercase; line-height: .95; letter-spacing: .01em;
-      will-change: opacity, transform;
-    }
-    .intro-title em { font-style: italic; font-weight: 400; color: var(--primary); }
-    .intro-cue {
-      position: absolute; left: 50%; bottom: 2.2rem; transform: translateX(-50%);
-      z-index: 2; display: flex; flex-direction: column; align-items: center; gap: .6rem;
-      color: var(--muted); font-family: var(--ff-display);
-      font-size: .72rem; letter-spacing: .3em; text-transform: uppercase;
-    }
-    .intro-cue-line { width: 1px; height: 2.4rem; background: linear-gradient(var(--primary), transparent); }
-    @media (prefers-reduced-motion: reduce) {
-      .intro { height: 100svh; }
-      .intro-stage { position: relative; }
-    }
   </style>
-  <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
-
-
 
 <!-- ─── Nav ─────────────────────────────────────────────────── -->
 <header class="nav">
@@ -664,72 +615,227 @@
     </header>
 
     <div class="products-track" id="prodTrack">
+
       <article class="product">
-        <div class="product-media"><img loading="lazy" src="assets/products/pomada-mate.jpg" alt="Pomada Mate" /></div>
+        <div class="product-media"><img loading="lazy" src="assets/products/shampoo-barba.jpg" alt="Shampoo para Barba" onerror="this.style.visibility='hidden'" /></div>
         <div class="product-body">
-          <h3 class="product-name">Pomada Mate</h3>
-          <p class="product-desc">Fijación fuerte, acabado seco sin brillo. Reactivable con agua.</p>
-          <div class="product-foot">
-            <span class="product-price">$280</span>
-            <a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20Pomada%20Mate" target="_blank" rel="noopener">Pedir</a>
-          </div>
+          <span class="product-brand">The Barber's Spa</span>
+          <h3 class="product-name">Shampoo para Barba</h3>
+          <p class="product-desc">Limpia y suaviza la barba sin resecarla, dejándola fresca y manejable para el cuidado diario.</p>
+          <span class="product-size">125 ml</span>
+          <div class="product-foot"><a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20Shampoo%20para%20Barba" target="_blank" rel="noopener">Pedir</a></div>
         </div>
       </article>
+
       <article class="product">
-        <div class="product-media"><img loading="lazy" src="assets/products/cera.jpg" alt="Cera Moldeadora" /></div>
+        <div class="product-media"><img loading="lazy" src="assets/products/monat-black.jpg" alt="MONAT Black Shampoo + Conditioner" onerror="this.style.visibility='hidden'" /></div>
         <div class="product-body">
-          <h3 class="product-name">Cera Moldeadora</h3>
-          <p class="product-desc">Control flexible con brillo natural. Ideal para texturizar y peinar.</p>
-          <div class="product-foot">
-            <span class="product-price">$260</span>
-            <a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20Cera%20Moldeadora" target="_blank" rel="noopener">Pedir</a>
-          </div>
+          <span class="product-brand">MONAT</span>
+          <h3 class="product-name">Black — Shampoo + Conditioner</h3>
+          <p class="product-desc">2 en 1 con Rejuveniqe: hidrata, limpia y da cuerpo al cabello en un solo paso.</p>
+          <span class="product-size">237 ml · 8 fl oz</span>
+          <div class="product-foot"><a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20MONAT%20Black%20Shampoo%20%2B%20Conditioner" target="_blank" rel="noopener">Pedir</a></div>
         </div>
       </article>
+
       <article class="product">
-        <div class="product-media"><img loading="lazy" src="assets/products/aceite-barba.jpg" alt="Aceite para Barba" /></div>
+        <div class="product-media"><img loading="lazy" src="assets/products/studio-one-blowout.jpg" alt="MONAT Studio One Blow Out Cream" onerror="this.style.visibility='hidden'" /></div>
         <div class="product-body">
-          <h3 class="product-name">Aceite para Barba</h3>
-          <p class="product-desc">Hidrata, suaviza y da brillo. Aroma amaderado discreto.</p>
-          <div class="product-foot">
-            <span class="product-price">$320</span>
-            <a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20Aceite%20para%20Barba" target="_blank" rel="noopener">Pedir</a>
-          </div>
+          <span class="product-brand">MONAT Studio One</span>
+          <h3 class="product-name">Blow Out Cream</h3>
+          <p class="product-desc">Crema para un acabado liso y pulido al secar, con Rejuveniqe.</p>
+          <span class="product-size">118 ml · 4 fl oz</span>
+          <div class="product-foot"><a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20MONAT%20Studio%20One%20Blow%20Out%20Cream" target="_blank" rel="noopener">Pedir</a></div>
         </div>
       </article>
+
       <article class="product">
-        <div class="product-media"><img loading="lazy" src="assets/products/tonico.jpg" alt="Tónico Sal de Mar" /></div>
+        <div class="product-media"><img loading="lazy" src="assets/products/shampoo-zabila.jpg" alt="Shampoo Hidratante Zábila" onerror="this.style.visibility='hidden'" /></div>
         <div class="product-body">
-          <h3 class="product-name">Tónico Sal de Mar</h3>
-          <p class="product-desc">Volumen y textura playera con acabado mate. Spray ligero.</p>
-          <div class="product-foot">
-            <span class="product-price">$240</span>
-            <a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20T%C3%B3nico%20Sal%20de%20Mar" target="_blank" rel="noopener">Pedir</a>
-          </div>
+          <span class="product-brand">The Barber's Spa</span>
+          <h3 class="product-name">Shampoo Hidratante · Zábila</h3>
+          <p class="product-desc">Hidratación profunda con zábila (aloe) para un cabello suave y manejable.</p>
+          <span class="product-size">250 ml</span>
+          <div class="product-foot"><a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20Shampoo%20Hidratante%20Z%C3%A1bila" target="_blank" rel="noopener">Pedir</a></div>
         </div>
       </article>
+
       <article class="product">
-        <div class="product-media"><img loading="lazy" src="assets/products/pomada-clasica.jpg" alt="Pomada Clásica" /></div>
+        <div class="product-media"><img loading="lazy" src="assets/products/ir-clinical-conditioner.jpg" alt="MONAT IR Clinical Thickening Conditioner" onerror="this.style.visibility='hidden'" /></div>
         <div class="product-body">
-          <h3 class="product-name">Pomada Clásica</h3>
-          <p class="product-desc">Brillo alto y peinado firme estilo retro. Base de agua.</p>
-          <div class="product-foot">
-            <span class="product-price">$300</span>
-            <a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20Pomada%20Cl%C3%A1sica" target="_blank" rel="noopener">Pedir</a>
-          </div>
+          <span class="product-brand">MONAT IR Clinical</span>
+          <h3 class="product-name">Thickening Conditioner</h3>
+          <p class="product-desc">Acondicionador engrosador con Rejuveniqe; ayuda a reducir la caída del cabello.</p>
+          <span class="product-size">178 ml · 6 fl oz</span>
+          <div class="product-foot"><a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20MONAT%20IR%20Clinical%20Thickening%20Conditioner" target="_blank" rel="noopener">Pedir</a></div>
         </div>
       </article>
+
       <article class="product">
-        <div class="product-media"><img loading="lazy" src="assets/products/kit.jpg" alt="Kit Esencial" /></div>
+        <div class="product-media"><img loading="lazy" src="assets/products/rejuveniqe-oil.jpg" alt="Rejuveniqe Oil Intensive by MONAT" onerror="this.style.visibility='hidden'" /></div>
         <div class="product-body">
-          <h3 class="product-name">Kit Esencial</h3>
-          <p class="product-desc">Pomada, aceite de barba y tónico en un set listo para regalar.</p>
-          <div class="product-foot">
-            <span class="product-price">$890</span>
-            <a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20Kit%20Esencial" target="_blank" rel="noopener">Pedir</a>
-          </div>
+          <span class="product-brand">MONAT</span>
+          <h3 class="product-name">Rejuveniqe Oil Intensive</h3>
+          <p class="product-desc">Aceite multiusos de aceites y extractos botánicos para nutrir cabello y piel.</p>
+          <span class="product-size">30 ml · 1 fl oz</span>
+          <div class="product-foot"><a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20Rejuveniqe%20Oil%20Intensive" target="_blank" rel="noopener">Pedir</a></div>
         </div>
       </article>
+
+      <article class="product">
+        <div class="product-media"><img loading="lazy" src="assets/products/gel-linaza.jpg" alt="Gel de Linaza" onerror="this.style.visibility='hidden'" /></div>
+        <div class="product-body">
+          <span class="product-brand">The Barber's Spa</span>
+          <h3 class="product-name">Gel de Linaza</h3>
+          <p class="product-desc">Fijación natural a base de linaza que define el peinado sin resecar.</p>
+          <span class="product-size">250 g</span>
+          <div class="product-foot"><a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20Gel%20de%20Linaza" target="_blank" rel="noopener">Pedir</a></div>
+        </div>
+      </article>
+
+      <article class="product">
+        <div class="product-media"><img loading="lazy" src="assets/products/locion-romero-guayaba.jpg" alt="Loción Romero Guayaba" onerror="this.style.visibility='hidden'" /></div>
+        <div class="product-body">
+          <span class="product-brand">The Barber's Spa</span>
+          <h3 class="product-name">Loción · Romero Guayaba</h3>
+          <p class="product-desc">Loción capilar con romero y guayaba para fortalecer y refrescar el cabello.</p>
+          <span class="product-size">125 ml</span>
+          <div class="product-foot"><a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20Loci%C3%B3n%20Romero%20Guayaba" target="_blank" rel="noopener">Pedir</a></div>
+        </div>
+      </article>
+
+      <article class="product">
+        <div class="product-media"><img loading="lazy" src="assets/products/gotas-oxigenantes.jpg" alt="Gotas Oxigenantes" onerror="this.style.visibility='hidden'" /></div>
+        <div class="product-body">
+          <span class="product-brand">The Barber's Spa</span>
+          <h3 class="product-name">Gotas Oxigenantes</h3>
+          <p class="product-desc">Spray oxigenante que revitaliza el cuero cabelludo y aporta frescura.</p>
+          <span class="product-size">125 ml</span>
+          <div class="product-foot"><a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20Gotas%20Oxigenantes" target="_blank" rel="noopener">Pedir</a></div>
+        </div>
+      </article>
+
+      <article class="product">
+        <div class="product-media"><img loading="lazy" src="assets/products/crema-peinar-vitaminas.jpg" alt="Crema para Peinar Vitaminas" onerror="this.style.visibility='hidden'" /></div>
+        <div class="product-body">
+          <span class="product-brand">The Barber's Spa</span>
+          <h3 class="product-name">Crema para Peinar · Vitaminas</h3>
+          <p class="product-desc">Crema con vitaminas que peina, controla y nutre el cabello.</p>
+          <span class="product-size">250 ml</span>
+          <div class="product-foot"><a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20Crema%20para%20Peinar%20Vitaminas" target="_blank" rel="noopener">Pedir</a></div>
+        </div>
+      </article>
+
+      <article class="product">
+        <div class="product-media"><img loading="lazy" src="assets/products/shampoo-regenerante-menta.jpg" alt="Shampoo Regenerante Menta" onerror="this.style.visibility='hidden'" /></div>
+        <div class="product-body">
+          <span class="product-brand">The Barber's Spa</span>
+          <h3 class="product-name">Shampoo Regenerante · Menta</h3>
+          <p class="product-desc">Regenera y refresca con menta, dejando una sensación de limpieza profunda.</p>
+          <span class="product-size">250 ml · 1 lt</span>
+          <div class="product-foot"><a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20Shampoo%20Regenerante%20Menta" target="_blank" rel="noopener">Pedir</a></div>
+        </div>
+      </article>
+
+      <article class="product">
+        <div class="product-media"><img loading="lazy" src="assets/products/ir-clinical-serum.jpg" alt="MONAT IR Clinical Hair Thinning Defense Serum" onerror="this.style.visibility='hidden'" /></div>
+        <div class="product-body">
+          <span class="product-brand">MONAT IR Clinical</span>
+          <h3 class="product-name">Hair Thinning Defense Serum</h3>
+          <p class="product-desc">Sérum para cuero cabelludo que defiende contra el adelgazamiento capilar.</p>
+          <span class="product-size">50 ml · 1.7 fl oz</span>
+          <div class="product-foot"><a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20MONAT%20IR%20Clinical%20Scalp%20Serum" target="_blank" rel="noopener">Pedir</a></div>
+        </div>
+      </article>
+
+      <article class="product">
+        <div class="product-media"><img loading="lazy" src="assets/products/shampoo-anticaida.jpg" alt="Shampoo Anticaída Ajo Cebolla Chile" onerror="this.style.visibility='hidden'" /></div>
+        <div class="product-body">
+          <span class="product-brand">The Barber's Spa</span>
+          <h3 class="product-name">Shampoo Anticaída · Ajo, Cebolla y Chile</h3>
+          <p class="product-desc">Fórmula de ajo, cebolla y chile para combatir la caída y estimular el crecimiento.</p>
+          <span class="product-size">250 ml · 1 lt</span>
+          <div class="product-foot"><a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20Shampoo%20Antica%C3%ADda%20Ajo%20Cebolla%20Chile" target="_blank" rel="noopener">Pedir</a></div>
+        </div>
+      </article>
+
+      <article class="product">
+        <div class="product-media"><img loading="lazy" src="assets/products/replenish-masque.jpg" alt="MONAT Replenish Masque" onerror="this.style.visibility='hidden'" /></div>
+        <div class="product-body">
+          <span class="product-brand">MONAT</span>
+          <h3 class="product-name">Replenish Masque</h3>
+          <p class="product-desc">Mascarilla intensiva con Rejuveniqe para cabello medio a grueso y seco.</p>
+          <span class="product-size">148 ml · 5 fl oz</span>
+          <div class="product-foot"><a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20MONAT%20Replenish%20Masque" target="_blank" rel="noopener">Pedir</a></div>
+        </div>
+      </article>
+
+      <article class="product">
+        <div class="product-media"><img loading="lazy" src="assets/products/renew-shampoo.jpg" alt="MONAT Renew Shampoo" onerror="this.style.visibility='hidden'" /></div>
+        <div class="product-body">
+          <span class="product-brand">MONAT</span>
+          <h3 class="product-name">Renew Shampoo</h3>
+          <p class="product-desc">Shampoo renovador con Rejuveniqe para cabello medio a grueso.</p>
+          <span class="product-size">237 ml · 8 fl oz</span>
+          <div class="product-foot"><a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20MONAT%20Renew%20Shampoo" target="_blank" rel="noopener">Pedir</a></div>
+        </div>
+      </article>
+
+      <article class="product">
+        <div class="product-media"><img loading="lazy" src="assets/products/renew-conditioner.jpg" alt="MONAT Renew Conditioner" onerror="this.style.visibility='hidden'" /></div>
+        <div class="product-body">
+          <span class="product-brand">MONAT</span>
+          <h3 class="product-name">Renew Conditioner</h3>
+          <p class="product-desc">Acondicionador renovador con Rejuveniqe para cabello medio a grueso y seco.</p>
+          <span class="product-size">178 ml · 6 fl oz</span>
+          <div class="product-foot"><a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20MONAT%20Renew%20Conditioner" target="_blank" rel="noopener">Pedir</a></div>
+        </div>
+      </article>
+
+      <article class="product">
+        <div class="product-media"><img loading="lazy" src="assets/products/after-shave.jpg" alt="Loción After Shave" onerror="this.style.visibility='hidden'" /></div>
+        <div class="product-body">
+          <span class="product-brand">The Barber's Spa</span>
+          <h3 class="product-name">Loción After Shave</h3>
+          <p class="product-desc">Loción refrescante post-afeitado que calma e hidrata la piel.</p>
+          <span class="product-size">120 ml</span>
+          <div class="product-foot"><a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20Loci%C3%B3n%20After%20Shave" target="_blank" rel="noopener">Pedir</a></div>
+        </div>
+      </article>
+
+      <article class="product">
+        <div class="product-media"><img loading="lazy" src="assets/products/mel-bros-pomade.jpg" alt="Mel Bros Co. Matte Styling Pomade" onerror="this.style.visibility='hidden'" /></div>
+        <div class="product-body">
+          <span class="product-brand">Mel Bros Co.</span>
+          <h3 class="product-name">Matte Styling Pomade</h3>
+          <p class="product-desc">Pomada de acabado mate; fijación firme sin brillo para un look natural.</p>
+          <span class="product-size">Acabado mate</span>
+          <div class="product-foot"><a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20Mel%20Bros%20Matte%20Styling%20Pomade" target="_blank" rel="noopener">Pedir</a></div>
+        </div>
+      </article>
+
+      <article class="product">
+        <div class="product-media"><img loading="lazy" src="assets/products/scalp-scrub.jpg" alt="MONAT Scalp Purifying Scrub" onerror="this.style.visibility='hidden'" /></div>
+        <div class="product-body">
+          <span class="product-brand">MONAT</span>
+          <h3 class="product-name">Scalp Purifying Scrub</h3>
+          <p class="product-desc">Exfoliante de cuero cabelludo con Rejuveniqe que remueve impurezas y residuos.</p>
+          <span class="product-size">134 ml · 4.5 fl oz</span>
+          <div class="product-foot"><a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20MONAT%20Scalp%20Purifying%20Scrub" target="_blank" rel="noopener">Pedir</a></div>
+        </div>
+      </article>
+
+      <article class="product">
+        <div class="product-media"><img loading="lazy" src="assets/products/bond-iq.jpg" alt="MONAT Bond IQ Peptide Therapy Leave-In Crème" onerror="this.style.visibility='hidden'" /></div>
+        <div class="product-body">
+          <span class="product-brand">MONAT</span>
+          <h3 class="product-name">Bond IQ — Leave-In Crème</h3>
+          <p class="product-desc">Crema sin enjuague con terapia de péptidos que fortalece y repara el cabello.</p>
+          <span class="product-size">134 ml · 4.5 fl oz</span>
+          <div class="product-foot"><a class="product-buy" href="https://wa.me/5218116904770?text=Hola%2C%20quiero%20pedir%3A%20MONAT%20Bond%20IQ%20Leave-In%20Cr%C3%A8me" target="_blank" rel="noopener">Pedir</a></div>
+        </div>
+      </article>
+
     </div>
   </div>
 </section>
@@ -740,7 +846,7 @@
     <div class="about">
       <div class="about-copy reveal">
         <p class="label">Quiénes somos</p>
-        <h2 class="about-title">OFICIO,<br>Y SERVICIO</h2>
+        <h2>Oficio,<br>no <span>servicio</span></h2>
         <p>The Barber's Spa nació en Monterrey con una idea clara: que un corte de cabello o un afeitado no son transacciones. Son experiencias que merecen tiempo, habilidad y atención.</p>
         <p>Nuestro equipo combina la formación del barbero tradicional con los estándares de un spa de primer nivel. Cada cliente recibe atención exclusiva, sin prisa y sin compromisos.</p>
       </div>
@@ -932,8 +1038,6 @@
   }
 })();
 </script>
-
-
 
 </body>
 </html>
